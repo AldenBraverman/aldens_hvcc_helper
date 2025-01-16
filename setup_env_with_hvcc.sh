@@ -59,7 +59,8 @@ install_git_submodules() {
   if [[ -f .gitmodules ]]; then
     echo "Initializing and updating Git submodules..."
     git submodule init
-    git submodule update --recursive
+    # git submodule update --remote
+    git submodule update --init --recursive
     echo "Git submodules initialized and updated."
   else
     echo "No Git submodules found."
@@ -146,7 +147,8 @@ juce_cmake() {
       fi
   done
 
-
+  cd "$new_dir_export/CMake"
+  cmake -G "Xcode" -B build .
 }
 
 # Replace JUCE boilerplate code
