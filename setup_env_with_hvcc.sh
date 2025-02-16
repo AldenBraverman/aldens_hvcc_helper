@@ -4,6 +4,10 @@
 # ./setup_env_with_hvcc.sh -t myTag -p /Users/aldenbraverman/Desktop/plugdata_juce/patches/osc2.pd  -n mySynth -s Y  -g juce
 #
 
+# Running on windows
+# https://stackoverflow.com/questions/71111124/running-sh-script-with-wsl-returns-command-not-found
+# wsl -e setup_env_with_hvcc.sh -t wsl_windows -p osc2.pd  -n mySynth -s Y  -g juce
+
 # Initialize variables
 TAG=""
 FILE_PATH=""
