@@ -2,3 +2,4 @@ hvcc
 jinja2
 importlib_resources
 json2daisy
+setuptools

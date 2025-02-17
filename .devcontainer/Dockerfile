@@ -10,6 +10,8 @@ FROM ubuntu:latest
 # Set noninteractive mode to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
+WORKDIR /app
+
 # Update package list and install dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -48,7 +50,10 @@ ENV EMSDK_PYTHON="/venv/bin/python"
 # Source emsdk_env.sh automatically for shell sessions
 RUN echo "source /emsdk/emsdk_env.sh" >> /root/.bashrc
 
+COPY . ./
+
 # Set the default command to bash
-CMD ["/bin/bash"]
+# CMD ["/bin/bash"]
+CMD chmod 755 setup_env_with_hvcc.sh && ./setup_env_with_hvcc.sh
 
 
