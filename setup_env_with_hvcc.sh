@@ -136,7 +136,7 @@ run_hvcc() {
 # Copy CMake files
 juce_cmake() {
   mkdir "$new_dir_export/CMake"
-  cp -r CMake/ "$new_dir_export/CMake"
+  cp -r CMake/ "$new_dir_export/"
 
   # Array of target files (adjust as needed)
   TARGET_FILES=("PluginEditor.cpp" "PluginProcessor.cpp" "PluginEditor.h" "PluginProcessor.h")
@@ -152,7 +152,7 @@ juce_cmake() {
   done
 
   cd "$new_dir_export/CMake"
-  cmake -G "Xcode" -B build .
+  # cmake -G "Xcode" -B build .
 }
 
 # Replace JUCE boilerplate code
@@ -174,13 +174,16 @@ juce_cmake() {
 # Main execution
 validate_args
 install_git_submodules
-setup_venv
+# setup_venv
 run_hvcc
 juce_cmake
 # replace_boilerplate
 
-deactivate
+# deactivate
 echo "--------------------------------------------------"
 echo "hvcc command executed successfully."
 echo "Output directory: outputs"
 echo "--------------------------------------------------"
+
+# cmake -G "Visual Studio 17 2022" -B build .
+# cmake -G "Xcode" -B build .

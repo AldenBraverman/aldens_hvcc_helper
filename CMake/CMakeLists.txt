@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(test VERSION 0.0.1)
 
-add_subdirectory(../../../JUCE ./JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+add_subdirectory(../../../libs/juce ./libs/juce)                    # If you've put JUCE in a subdirectory called JUCE
 
 juce_add_plugin(test
     # VERSION ...                               # Set this if the plugin version is different to the project version
