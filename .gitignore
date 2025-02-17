@@ -1,3 +1,11 @@
 /outputs/
 /Cmake/build/
 /hvcc_juce_helper_venv
+
+# Node Testing
+/nodejs_testing/CMake/
+/nodejs_testing/Heavy/react/node_modules
+/nodejs_testing/Heavy/c/
+/nodejs_testing/Heavy/hv/
+/nodejs_testing/Heavy/ir/
+/nodejs_testing/Heavy/react/build/
