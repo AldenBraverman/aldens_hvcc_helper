@@ -126,8 +126,8 @@ run_hvcc() {
   fi
 
   # Run hvcc command
-  # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./heavylib"
-  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "js" -p "./heavylib"
+  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./heavylib"
+  # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "js" -p "./heavylib"
 
   # Run Python script with the new directory
   python3 parse_params.py "$heavy_dir" "$NAME"

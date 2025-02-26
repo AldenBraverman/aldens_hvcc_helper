@@ -1,5 +1,6 @@
 import re
 import sys
+import json
 
 # Check if the directory argument is provided
 # if len(sys.argv) != 2:
@@ -48,33 +49,68 @@ else:
     print("Function not found.")
 
 # Regex to extract the body of getParameterInfo
-parameter_info_regex = r"int Heavy_[a-zA-Z_][a-zA-Z_0-9]*::getParameterInfo\(.*?\) \{(.*?)return 1;"
+parameter_info_regex = r"int Heavy_[a-zA-Z_][a-zA-Z_0-9]*::getParameterInfo\(.*?\) \{(.*?)"
 parameter_info_match = re.search(parameter_info_regex, cpp_code, re.S)
+print("parameter info match: "+str(parameter_info_match))
 
 if parameter_info_match:
     # Extracted function body
-    parameter_info_body = parameter_info_match.group(1)
+    parameter_info_body = parameter_info_match.group(0)
+    print("Function Body: "+str(parameter_info_body))
 
-    # Regex to extract relevant data from each case block
-    case_block_regex = (
-        r"case\s+\d+:\s*\{.*?info->hash\s*=\s*(0x[0-9A-Fa-f]+);.*?"
-        r"info->minVal\s*=\s*([\d\.f]+);.*?"
-        r"info->maxVal\s*=\s*([\d\.f]+);.*?"
-        r"info->defaultVal\s*=\s*([\d\.f]+);.*?\}"
-    )
+case_pattern = r'case\s+(\d+):\s*\{\s*' \
+                r'info->name\s*=\s*"([^"]+)";\s*' \
+                r'info->hash\s*=\s*(0x[0-9A-F]+);\s*' \
+                r'info->type\s*=\s*HvParameterType::([^;]+);\s*' \
+                r'info->minVal\s*=\s*([^;]+);\s*' \
+                r'info->maxVal\s*=\s*([^;]+);\s*' \
+                r'info->defaultVal\s*=\s*([^;]+);\s*' \
+                r'break;'
 
-    # Use re.S in the re.findall call
-    case_blocks = re.findall(case_block_regex, parameter_info_body, re.S)
+# Find all matches
+parameters = []
+matches = re.finditer(case_pattern, cpp_code, re.DOTALL)
 
-    # Update the dictionary with minVal, maxVal, and defaultVal
-    for hash_value, min_val, max_val, default_val in case_blocks:
-        if hash_value in case_dict:
-            case_dict[hash_value] = {
-                'name': case_dict[hash_value],
-                'minVal': float(min_val.rstrip('f')),
-                'maxVal': float(max_val.rstrip('f')),
-                'defaultVal': float(default_val.rstrip('f')),
-            }
+for match in matches:
+    # Skip the default case (usually has index as "default")
+    if match.group(1) != "default":
+        parameter = {
+            "index": int(match.group(1)),
+            "name": match.group(2),
+            "hash": match.group(3),
+            "type": match.group(4),
+            "minVal": float(match.group(5).strip('f')),
+            "maxVal": float(match.group(6).strip('f')),
+            "defaultVal": float(match.group(7).strip('f'))
+        }
+        parameters.append(parameter)
+
+# Print extracted parameters
+print("Extracted Parameters:")
+for param in parameters:
+    print(f"Index: {param['index']}")
+    print(f"  Name: {param['name']}")
+    print(f"  Hash: {param['hash']}")
+    print(f"  Min Value: {param['minVal']}")
+    print(f"  Max Value: {param['maxVal']}")
+    print(f"  Default Value: {param['defaultVal']}")
+    print()
+
+# Example of how to use the extracted data
+print("Parameter Names and Ranges:")
+for param in parameters:
+    print(f"{param['name']}: {param['minVal']} to {param['maxVal']} (default: {param['defaultVal']})")
+
+
 
 # Output the updated dictionary
-print(case_dict)
+# print("My case_dict: "+str(case_dict))
+
+# Define the JSON output file path
+json_file_path = new_dir + f"/Heavy_{synth_name}_params.json"
+
+# Write the dictionary to a JSON file
+with open(json_file_path, "w", encoding="utf-8") as json_file:
+    json.dump(parameters, json_file, indent=4)
+
+print(f"Dictionary saved to {json_file_path}")
