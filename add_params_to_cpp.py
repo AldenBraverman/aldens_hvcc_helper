@@ -45,7 +45,14 @@ def process_parameters(parameters, cpp_file_path):
     for param in parameters:
         print(f"{param['name']} (Hash: {param['hash']}) - Range: {param['minVal']} to {param['maxVal']}, Default: {param['defaultVal']}")
     
-    print("CPP_FILE_PATH: "+cpp_file_path)
+    # print("CPP_FILE_PATH: "+cpp_file_path)
+
+    if(cpp_file_path.endswith(".h")):
+        print("This is the .h file: "+cpp_file_path)
+        
+
+    if(cpp_file_path.endswith(".cpp")):
+        print("This is the .cpp file: "+cpp_file_path)
     
     # # Example 2: Filter parameters based on a condition
     # high_range_params = [p for p in parameters if p['maxVal'] > 100]
