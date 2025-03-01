@@ -151,25 +151,25 @@ juce_cmake() {
       fi
   done
 
-  cd "$new_dir_export/CMake"
+  # cd "$new_dir_export/CMake"
   # cmake -G "Xcode" -B build .
 }
 
 # Replace JUCE boilerplate code
-# replace_boilerplate() {
-#   # Array of target files (adjust as needed)
-#   TARGET_FILES=("PluginEditor.cpp" "PluginProcessor.cpp" "PluginEditor.h" "PluginProcessor.h")
+replace_boilerplate() {
+  # Array of target files (adjust as needed)
+  TARGET_FILES=("PluginProcessor.cpp" "PluginProcessor.h")
 
-#   # Replace placeholder in each target file
-#   for file in "${TARGET_FILES[@]}"; do
-#       TARGET_PATH="$new_dir_export/CMake/src/$file"
-#       if [[ -f "$TARGET_PATH" ]]; then
-#           python3 replace_boilerplate.py "$TARGET_PATH" "$NAME"
-#       else
-#           echo "Warning: File '$TARGET_PATH' does not exist. Skipping."
-#       fi
-#   done
-# }
+  # Replace placeholder in each target file
+  for file in "${TARGET_FILES[@]}"; do
+      TARGET_PATH="$new_dir_export/CMake/src/$file"
+      if [[ -f "$TARGET_PATH" ]]; then
+          python3 add_params_to_cpp.py "$TARGET_PATH" "$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
+      else
+          echo "Warning: File '$TARGET_PATH' does not exist. Skipping."
+      fi
+  done
+}
 
 # Main execution
 validate_args
@@ -177,7 +177,7 @@ install_git_submodules
 # setup_venv
 run_hvcc
 juce_cmake
-# replace_boilerplate
+replace_boilerplate
 
 # deactivate
 echo "--------------------------------------------------"
