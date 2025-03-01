@@ -137,6 +137,7 @@ run_hvcc() {
 juce_cmake() {
   mkdir "$new_dir_export/CMake"
   cp -r CMake/ "$new_dir_export/"
+  cp CMakeLists.txt "$new_dir_export/"
 
   # Array of target files (adjust as needed)
   TARGET_FILES=("PluginEditor.cpp" "PluginProcessor.cpp" "PluginEditor.h" "PluginProcessor.h")

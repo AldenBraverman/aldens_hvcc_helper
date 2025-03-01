@@ -11,6 +11,15 @@
 #include <JuceHeader.h>
 #include "Heavy_mySynth.h"
 
+namespace ParameterID
+{
+    #define PARAMETER_ID(str) const juce::ParameterID str(#str, 1);
+    // Parameters go here like this: PARAMETER_ID(param)
+    // @_PARAM_IDS_GO_HERE
+
+    #undef PARAMETER_ID
+}
+
 //==============================================================================
 /**
 */
@@ -53,6 +62,17 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+
+    juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", createParameterLayout() };
+    std::atomic<bool> parametersChanged { false };
+    void valueTreePropertyChanged(juce::ValueTree&, const juce::Identifier&) override
+    {
+        parametersChanged.store(true);
+    }
+
+    void update();
+
+    // @_PLACE_PARAMS_HERE
 
 private:
     //==============================================================================
