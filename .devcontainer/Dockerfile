@@ -19,6 +19,19 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-venv \
     cmake \
+    pkg-config \
+
+    # JUCE Linux Dependencies
+    libasound2-dev \
+    libjack-jackd2-dev \
+    ladspa-sdk \
+    libcurl4-openssl-dev  \
+    libfreetype-dev libfontconfig1-dev \
+    libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
+    libwebkit2gtk-4.1-dev \
+    libglu1-mesa-dev \
+    mesa-common-dev \
+
     build-essential \
     libssl-dev \
     libffi-dev \
@@ -33,6 +46,8 @@ RUN /venv/bin/pip install --upgrade pip && /venv/bin/pip install -r /tmp/require
 
 # Set up environment variables to activate venv automatically
 ENV PATH="/venv/bin:$PATH"
+
+ENV EXTERNAL_JUCE_LIB_PATH=/libs/juce
 
 # Install emsdk
 RUN git clone https://github.com/emscripten-core/emsdk.git /emsdk && \

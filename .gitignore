@@ -1,6 +1,7 @@
 /outputs/
 /Cmake/build/
 /hvcc_juce_helper_venv
+/build
 
 # Node Testing
 /nodejs_testing/CMake/

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# ./setup_env_with_hvcc.sh -t myTag -p /Users/aldenbraverman/Desktop/plugdata_juce/patches/osc2.pd  -n mySynth -s Y  -g juce
+# ./setup_env_with_hvcc.sh -t my_reorg -p aldens_polysynth.pd -n aldens_synth -s Y -g juce
 #
 
 # Running on windows
@@ -126,18 +126,24 @@ run_hvcc() {
   fi
 
   # Run hvcc command
-  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./heavylib"
+  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./libs/heavylib"
   # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "js" -p "./heavylib"
 
   # Run Python script with the new directory
-  python3 parse_params.py "$heavy_dir" "$NAME"
+  python3 ./utils/parse_params.py "$heavy_dir" "$NAME"
 }
 
 # Copy CMake files
 juce_cmake() {
-  mkdir "$new_dir_export/CMake"
-  cp -r CMake/ "$new_dir_export/"
-  cp CMakeLists.txt "$new_dir_export/"
+  mkdir "$new_dir_export/plugin"
+  # mkdir "$new_dir_export/libs"
+  cp -r plugin_template/plugin "$new_dir_export/"
+  cp plugin_template/CMakeLists.txt "$new_dir_export/"
+
+  # Copy Juce library into dir
+  # cp -r libs/juce "$new_dir_export/"
+  # Create alias for juce library for Cmake
+  # ln -s libs/juce "$new_dir_export/libs"
 
   # Array of target files (adjust as needed)
   TARGET_FILES=("PluginEditor.cpp" "PluginProcessor.cpp" "PluginEditor.h" "PluginProcessor.h")
