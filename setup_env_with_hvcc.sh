@@ -136,6 +136,7 @@ run_hvcc() {
 # Copy CMake files
 juce_cmake() {
   mkdir "$new_dir_export/plugin"
+  # mkdir "$new_dir_export/juce_build"
   # mkdir "$new_dir_export/libs"
   cp -r plugin_template/plugin "$new_dir_export/"
   cp plugin_template/CMakeLists.txt "$new_dir_export/"
