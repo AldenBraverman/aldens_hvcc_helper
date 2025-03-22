@@ -47,7 +47,7 @@ RUN /venv/bin/pip install --upgrade pip && /venv/bin/pip install -r /tmp/require
 # Set up environment variables to activate venv automatically
 ENV PATH="/venv/bin:$PATH"
 
-ENV EXTERNAL_JUCE_LIB_PATH=/libs/juce
+# ENV EXTERNAL_JUCE_LIB_PATH=/libs/juce
 
 # Install emsdk
 RUN git clone https://github.com/emscripten-core/emsdk.git /emsdk && \
