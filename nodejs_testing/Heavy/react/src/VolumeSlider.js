@@ -6,13 +6,13 @@ import { Slider, Typography, Box } from "@mui/material";
 export default function VolumeSlider() {
   const [sliderValue, setSliderValue] = useState(0.05);
 
-  useEffect(() => {
-    // Hide the HTML slider when React component mounts
-    const htmlSliderContainer = document.querySelector(".parameter-slider");
-    if (htmlSliderContainer) {
-      htmlSliderContainer.style.display = "none";
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Hide the HTML slider when React component mounts
+  //   const htmlSliderContainer = document.querySelector(".parameter-slider");
+  //   if (htmlSliderContainer) {
+  //     htmlSliderContainer.style.display = "none";
+  //   }
+  // }, []);
 
   const handleChange = (event, newValue) => {
     setSliderValue(newValue);

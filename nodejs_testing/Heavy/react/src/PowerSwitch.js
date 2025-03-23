@@ -17,13 +17,18 @@ const PowerSwitch = withStyles((theme) => ({
   track: {},
 }))(Switch);
 
-const PowerSwitchComponent = ({ checked, onChange }) => {
+const PowerSwitchComponent = ({ checked, onChange, onToggle }) => {
+  const handleChange = (event) => {
+    onChange(event);
+    onToggle(event.target.checked);
+  };
+
   return (
     <FormControlLabel
       control={
         <PowerSwitch
           checked={checked}
-          onChange={onChange}
+          onChange={handleChange}
           name="powerSwitch"
         />
       }

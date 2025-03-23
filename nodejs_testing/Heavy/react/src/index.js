@@ -24,13 +24,21 @@ function App() {
     setChecked(event.target.checked);
   };
 
+  const handleToggle = (isChecked) => {
+    const transportButton = document.getElementById('transportButton');
+    if (transportButton) {
+      transportButton.checked = isChecked;
+      transportButton.dispatchEvent(new Event('change'));
+    }
+  };
+
   return (
     <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "50px" }}>
       <CssBaseline />
       <h1>Material UI Slider Example</h1>
       <VolumeSlider value={volume} onChange={setVolume} />
       <ThemeProvider theme={theme}>
-        <PowerSwitchComponent checked={checked} onChange={handleChange} />
+        <PowerSwitchComponent checked={checked} onChange={handleChange} onToggle={handleToggle} />
       </ThemeProvider>
     </Container>
   );
