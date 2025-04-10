@@ -1,33 +1,25 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
-
-#include <JuceHeader.h>
+// #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include <juce_gui_extra/juce_gui_extra.h>
 
 //==============================================================================
-/**
-*/
-class Boiler_plateAudioProcessorEditor  : public juce::AudioProcessorEditor
-{
-public:
-    Boiler_plateAudioProcessorEditor (Boiler_plateAudioProcessor&);
-    ~Boiler_plateAudioProcessorEditor() override;
+namespace Boiler_plate {
+  class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor
+  {
+  public:
+    AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
+    ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
-private:
+  private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    Boiler_plateAudioProcessor& audioProcessor;
+    AudioPluginAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Boiler_plateAudioProcessorEditor)
-};
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
+  };
+}

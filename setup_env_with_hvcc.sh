@@ -126,8 +126,8 @@ run_hvcc() {
   fi
 
   # Run hvcc command
-  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./libs/heavylib"
-  # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "js" -p "./heavylib"
+  # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./libs/heavylib"
+  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "js" -p "./libs/heavylib"
 
   # Run Python script with the new directory
   python3 ./utils/parse_params.py "$heavy_dir" "$NAME"
@@ -147,13 +147,15 @@ juce_cmake() {
   # ln -s libs/juce "$new_dir_export/libs"
 
   # Array of target files (adjust as needed)
-  TARGET_FILES=("PluginEditor.cpp" "PluginProcessor.cpp" "PluginEditor.h" "PluginProcessor.h")
+  TARGET_FILES=("src/PluginEditor.cpp" "src/PluginProcessor.cpp" "src/PluginEditor.h" "src/PluginProcessor.h" "CMakeLists.txt" "../CMakeLists.txt")
 
   # Replace placeholder in each target file
   for file in "${TARGET_FILES[@]}"; do
-      TARGET_PATH="$new_dir_export/CMake/src/$file"
+      TARGET_PATH="$new_dir_export/plugin/$file"
+      echo "$TARGET_PATH"
       if [[ -f "$TARGET_PATH" ]]; then
-          python3 replace_boilerplate.py "$TARGET_PATH" "$NAME"
+          pwd
+          python3 ./utils/replace_boilerplate.py "$TARGET_PATH" "$NAME"
       else
           echo "Warning: File '$TARGET_PATH' does not exist. Skipping."
       fi
@@ -170,7 +172,7 @@ replace_boilerplate() {
 
   # Replace placeholder in each target file
   for file in "${TARGET_FILES[@]}"; do
-      TARGET_PATH="$new_dir_export/CMake/src/$file"
+      TARGET_PATH="$new_dir_export/plugin/src/$file"
       if [[ -f "$TARGET_PATH" ]]; then
           python3 add_params_to_cpp.py "$TARGET_PATH" "$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
       else
