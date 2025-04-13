@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     cmake \
     pkg-config \
+    jq \
 
     # JUCE Linux Dependencies
     libasound2-dev \

@@ -4,6 +4,9 @@
 # ./setup_env_with_hvcc.sh -t my_reorg -p aldens_polysynth.pd -n aldens_synth -s Y -g juce
 #
 
+# USE LF LINE ENDINGS - CLRF -> LF
+# https://unix.stackexchange.com/questions/721844/linux-bash-shell-script-error-cannot-execute-required-file-not-found
+
 # Running on windows
 # https://stackoverflow.com/questions/71111124/running-sh-script-with-wsl-returns-command-not-found
 # wsl -e setup_env_with_hvcc.sh -t wsl_windows -p osc2.pd  -n mySynth -s Y  -g juce
@@ -15,46 +18,80 @@ NAME=""
 IS_SYNTH=""
 GENERATOR=""
 
+# # Parse arguments
+# while getopts "t:p:n:s:g:" opt; do
+#   case $opt in
+#     t) TAG=$OPTARG ;;
+#     p) FILE_PATH=$OPTARG ;;
+#     n) NAME=$OPTARG ;;
+#     s) IS_SYNTH=$OPTARG ;;
+#     g) GENERATOR=$OPTARG ;;
+#     *)
+#       echo "Usage: bash ./setup_env_with_hvcc.sh -t <tag> -p <file_path> -n <name> -s <isSynth> -g <generator>"
+#       exit 1
+#       ;;
+#   esac
+# done
+
+#!/bin/bash
+
 # Parse arguments
-while getopts "t:p:n:s:g:" opt; do
+while getopts "c:" opt; do
   case $opt in
-    t) TAG=$OPTARG ;;
-    p) FILE_PATH=$OPTARG ;;
-    n) NAME=$OPTARG ;;
-    s) IS_SYNTH=$OPTARG ;;
-    g) GENERATOR=$OPTARG ;;
-    *)
-      echo "Usage: bash ./setup_env_with_hvcc.sh -t <tag> -p <file_path> -n <name> -s <isSynth> -g <generator>"
-      exit 1
-      ;;
+    c) CONFIG_FILE="$OPTARG"
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+        exit 1
+    ;;
   esac
 done
 
+if [ -z "$CONFIG_FILE" ]; then
+  echo "Usage: $0 -c <config_file.json>"
+  exit 1
+fi
+
+# Extract variables from JSON
+TAG=$(jq -r '.folder_name' "$CONFIG_FILE")
+FILE_PATH=$(jq -r '.pd_paths.patch_path' "$CONFIG_FILE")
+NAME=$(jq -r '.project_name' "$CONFIG_FILE")
+IS_SYNTH=$(jq -r '.is_synth' "$CONFIG_FILE")
+
+# The rest of your script can use $tag, $file_path, $name, $is_synth as before
+echo "Tag: $TAG"
+echo "File Path: $FILE_PATH"
+echo "Project Name: $NAME"
+echo "Is Synth: $IS_SYNTH"
+
 # Validate arguments
 validate_args() {
-  if [[ -z "$TAG" || -z "$FILE_PATH" || -z "$NAME" || -z "$IS_SYNTH" || -z "$GENERATOR" ]]; then
-      echo "All arguments (-t, -p, -n, -s, -g) are required."
-      exit 1
-  fi
+  # if [[ -z "$TAG" || -z "$FILE_PATH" || -z "$NAME" || -z "$IS_SYNTH" || -z "$GENERATOR" ]]; then
+  #     echo "All arguments (-t, -p, -n, -s, -g) are required."
+  #     exit 1
+  # fi
 
-  if [[ "$IS_SYNTH" != "Y" && "$IS_SYNTH" != "N" ]]; then
-      echo "Error: -s argument must be 'Y' or 'N'."
-      exit 1
-  fi
+  # if [[ "$IS_SYNTH" != "Y" && "$IS_SYNTH" != "N" ]]; then
+  #     echo "Error: -s argument must be 'Y' or 'N'."
+  #     exit 1
+  # fi
 
-  if [[ "$GENERATOR" != "juce" && "$GENERATOR" != "web" ]]; then
-      echo "Error: -g argument must be 'juce' or 'web'."
-      exit 1
-  fi
+  # if [[ "$GENERATOR" != "juce" && "$GENERATOR" != "web" ]]; then
+  #     echo "Error: -g argument must be 'juce' or 'web'."
+  #     exit 1
+  # fi
 
-  if [[ ! "$FILE_PATH" =~ \.pd$ ]]; then
-      echo "Error: The file must be a .pd file."
-      exit 1
-  fi
+  # if [[ ! "$FILE_PATH" =~ \.pd$ ]]; then
+  #     echo "Error: The file must be a .pd file."
+  #     exit 1
+  # fi
 
-  if [[ ! "$TAG" =~ ^[a-zA-Z0-9_-]+$ ]]; then
-      echo "Error: TAG contains invalid characters."
-      exit 1
+  # if [[ ! "$TAG" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+  #     echo "Error: TAG contains invalid characters."
+  #     exit 1
+  # fi
+  if [ -z "$TAG" ] || [ -z "$FILE_PATH" ] || [ -z "$NAME" ]; then
+    echo "Missing required config values: tag, file_path, or name."
+    exit 1
   fi
 }
 
@@ -174,7 +211,7 @@ replace_boilerplate() {
   for file in "${TARGET_FILES[@]}"; do
       TARGET_PATH="$new_dir_export/plugin/src/$file"
       if [[ -f "$TARGET_PATH" ]]; then
-          python3 add_params_to_cpp.py "$TARGET_PATH" "$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
+          python3 ./utils/add_params_to_cpp.py "$TARGET_PATH" "$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
       else
           echo "Warning: File '$TARGET_PATH' does not exist. Skipping."
       fi

@@ -16,7 +16,7 @@
         "react_project_path": ""
     },
     "pd_paths": {
-        "patch_path": "",
+        "patch_path": "./aldens_polysynth.pd",
         "heavylib_path": ""
     }
   }
