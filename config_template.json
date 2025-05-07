@@ -17,6 +17,21 @@
     },
     "pd_paths": {
         "patch_path": "./aldens_polysynth.pd",
-        "heavylib_path": ""
+        "heavylib_path": "./libs/heavylib"
+    },
+    "cmake_settings": {
+        "plugin_name": "MyPlugin",
+        "company_name": "aldenbraverman",
+        "is_synth": "FALSE",
+        "needs_midi_input": "FALSE",
+        "needs_midi_output": "FALSE",
+        "plugin_manufacturer_code": "ALDB",
+        "plugin_code": "ALDB",
+        "formats": [
+            "VST3",
+            "AU",
+            "Standalone"
+        ],
+        "needs_webview2": "TRUE"
     }
-  }
+}

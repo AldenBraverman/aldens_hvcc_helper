@@ -61,12 +61,12 @@ namespace Boiler_plate {
       void getStateInformation (juce::MemoryBlock& destData) override;
       void setStateInformation (const void* data, int sizeInBytes) override;
 
-      juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", createParameterLayout() };
+      // juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", createParameterLayout() };
 
       // @_PLACE_PARAMS_HERE
 
   private:
-      juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+      // juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
           
       std::atomic<bool> parametersChanged { false };
       void valueTreePropertyChanged(juce::ValueTree&, const juce::Identifier&) override

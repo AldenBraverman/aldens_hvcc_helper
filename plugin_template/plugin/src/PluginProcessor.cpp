@@ -6,9 +6,9 @@
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
-#include "PluginEditor.h"
-#include "Utils.h"
+#include "Boiler_plate/PluginProcessor.h"
+#include "Boiler_plate/PluginEditor.h"
+#include "Boiler_plate/Utils.h"
 
 namespace Boiler_plate {
     //==============================================================================
@@ -192,8 +192,13 @@ namespace Boiler_plate {
 
     //==============================================================================
     // This creates new instances of the plugin..
-    juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-    {
-        return new AudioPluginAudioProcessor();
-    }
+    // juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+    // {
+    //     return new AudioPluginAudioProcessor();
+    // }
+}
+
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+{
+    return new Boiler_plate::AudioPluginAudioProcessor();
 }

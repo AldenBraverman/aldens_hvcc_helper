@@ -6,8 +6,8 @@
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
-#include "PluginEditor.h"
+#include "Boiler_plate/PluginProcessor.h"
+#include "Boiler_plate/PluginEditor.h"
 
 namespace Boiler_plate {
   namespace {

@@ -173,10 +173,19 @@ run_hvcc() {
 # Copy CMake files
 juce_cmake() {
   mkdir "$new_dir_export/plugin"
+  mkdir "$new_dir_export/plugin/include"
+  mkdir "$new_dir_export/plugin/include/$NAME/"
   # mkdir "$new_dir_export/juce_build"
   # mkdir "$new_dir_export/libs"
-  cp -r plugin_template/plugin "$new_dir_export/"
-  cp plugin_template/CMakeLists.txt "$new_dir_export/"
+  cp -r plugin_template/plugin/src "$new_dir_export/plugin"
+
+  cp plugin_template/CMakeLists.txt "$new_dir_export/CMakeLists.txt"
+  cp plugin_template/plugin/CMakeLists.txt "$new_dir_export/plugin/CMakeLists.txt"
+
+  # We may want to specify in config a different path for the UI code
+  cp -r plugin_template/plugin/ui "$new_dir_export/plugin"
+
+  cp -r plugin_template/plugin/include/Boiler_plate/* "$new_dir_export/plugin/include/$NAME"
 
   # Copy Juce library into dir
   # cp -r libs/juce "$new_dir_export/"
@@ -184,7 +193,7 @@ juce_cmake() {
   # ln -s libs/juce "$new_dir_export/libs"
 
   # Array of target files (adjust as needed)
-  TARGET_FILES=("src/PluginEditor.cpp" "src/PluginProcessor.cpp" "src/PluginEditor.h" "src/PluginProcessor.h" "CMakeLists.txt" "../CMakeLists.txt")
+  TARGET_FILES=("src/PluginEditor.cpp" "src/PluginProcessor.cpp" "include/$NAME/PluginEditor.h" "include/$NAME/PluginProcessor.h" "CMakeLists.txt" "../CMakeLists.txt")
 
   # Replace placeholder in each target file
   for file in "${TARGET_FILES[@]}"; do
