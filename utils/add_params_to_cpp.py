@@ -119,10 +119,10 @@ def add_lines_after_marker(file_path, marker, new_lines):
                     file.write(new_line + '\n')
         
         # If marker wasn't found, append marker and new lines at the end
-        if not marker_found:
-            file.write('\n' + marker + '\n')
-            for new_line in new_lines:
-                file.write(new_line + '\n')
+        # if not marker_found:
+        #     file.write('\n' + marker + '\n')
+        #     for new_line in new_lines:
+        #         file.write(new_line + '\n')
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

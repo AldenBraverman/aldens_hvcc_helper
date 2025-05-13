@@ -196,6 +196,11 @@ namespace Boiler_plate {
     // {
     //     return new AudioPluginAudioProcessor();
     // }
+    juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
+    {
+        juce::AudioProcessorValueTreeState::ParameterLayout layout;
+        return layout;
+    }
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

@@ -215,10 +215,21 @@ juce_cmake() {
 replace_boilerplate() {
   # Array of target files (adjust as needed)
   TARGET_FILES=("PluginProcessor.cpp" "PluginProcessor.h")
+  TARGET_HEADER_FILES=("PluginEditor.h" "PluginProcessor.h")
 
   # Replace placeholder in each target file
   for file in "${TARGET_FILES[@]}"; do
       TARGET_PATH="$new_dir_export/plugin/src/$file"
+      if [[ -f "$TARGET_PATH" ]]; then
+          python3 ./utils/add_params_to_cpp.py "$TARGET_PATH" "$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
+      else
+          echo "Warning: File '$TARGET_PATH' does not exist. Skipping."
+      fi
+  done
+
+    # Replace placeholder in each target file
+  for file in "${TARGET_HEADER_FILES[@]}"; do
+      TARGET_PATH="$new_dir_export/plugin/include/$NAME/$file"
       if [[ -f "$TARGET_PATH" ]]; then
           python3 ./utils/add_params_to_cpp.py "$TARGET_PATH" "$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
       else
