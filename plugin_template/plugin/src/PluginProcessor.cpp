@@ -199,6 +199,7 @@ namespace Boiler_plate {
     juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
     {
         juce::AudioProcessorValueTreeState::ParameterLayout layout;
+        // @_LAYOUT_PARAM_IDS_GO_HERE
         return layout;
     }
 }

@@ -238,6 +238,16 @@ replace_boilerplate() {
   done
 }
 
+add_params_to_layout() {
+  # Paths to input files
+  JSON_PATH="$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
+  CPP_PATH="$new_dir_export/plugin/src/PluginProcessor.cpp"
+
+  # Call the Python script
+  python3 ./utils/add_params_to_layout.py "$JSON_PATH" "$CPP_PATH"
+}
+
+
 # Main execution
 validate_args
 install_git_submodules
@@ -245,6 +255,7 @@ install_git_submodules
 run_hvcc
 juce_cmake
 replace_boilerplate
+add_params_to_layout
 
 # deactivate
 echo "--------------------------------------------------"
