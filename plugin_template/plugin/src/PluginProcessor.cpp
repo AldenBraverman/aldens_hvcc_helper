@@ -108,11 +108,11 @@ namespace Boiler_plate {
         parametersChanged.store(true);
     }
 
-    void Plugdata_templateAudioProcessor::update()
+    void AudioPluginAudioProcessor::update()
     {
         // @_ADD_PARAMS_TO_UPDATE_HERE
-        // float volValue = _volParam->get();
-        // hv_sendFloatToReceiver(context, 0x8559698F, volValue);
+        // float _volValue = volParam->get();
+        // hv_sendFloatToReceiver(context, 0x8559698F, _volValue);
     }
 
     void AudioPluginAudioProcessor::releaseResources()

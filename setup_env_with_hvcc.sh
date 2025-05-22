@@ -6,6 +6,7 @@
 
 # USE LF LINE ENDINGS - CLRF -> LF
 # https://unix.stackexchange.com/questions/721844/linux-bash-shell-script-error-cannot-execute-required-file-not-found
+# https://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/
 
 # Running on windows
 # https://stackoverflow.com/questions/71111124/running-sh-script-with-wsl-returns-command-not-found
@@ -257,7 +258,14 @@ init_prepare_to_play() {
   CPP_PATH="$new_dir_export/plugin/src/PluginProcessor.cpp"
 
   # Call the Python script
-  python3 ./utils/init_prepare_to_play.py "$JSON_PATH" "$CPP_PATH" "$NAME"
+  python3 ./utils/init_prepare_to_play.py "$CPP_PATH" "$NAME"
+}
+
+add_params_to_update() { 
+  JSON_PATH="$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
+  CPP_PATH="$new_dir_export/plugin/src/PluginProcessor.cpp"
+  
+  python3 ./utils/insert_param_updates.py "$CPP_PATH" "$JSON_PATH"
 }
 
 # Main execution
