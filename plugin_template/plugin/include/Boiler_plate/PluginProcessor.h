@@ -66,6 +66,8 @@ namespace Boiler_plate {
       // @_PLACE_PARAMS_HERE
 
   private:
+      HeavyContextInterface *context;
+
       juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
           
       std::atomic<bool> parametersChanged { false };
@@ -75,6 +77,13 @@ namespace Boiler_plate {
       }
 
       void update();
+
+      void splitBufferByEvents(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages);
+      void handleMIDI(uint8_t data0, uint8_t data1, uint8_t data2);
+      void render(juce::AudioBuffer<float>& buffer, int sampleCount, int bufferOffset);
+      
+      void noteOn(int note, int velocity);
+      void noteOff(int note);
       //==============================================================================
       JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
   };

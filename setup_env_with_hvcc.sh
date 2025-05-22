@@ -247,6 +247,18 @@ add_params_to_layout() {
   python3 ./utils/add_params_to_layout.py "$JSON_PATH" "$CPP_PATH"
 }
 
+is_synth_note_on_off() { 
+  python3 ./utils/is_synth_note_on_off.py "$IS_SYNTH" "$CPP_PATH"
+}
+
+init_prepare_to_play() {
+  # Paths to input files
+  JSON_PATH="$new_dir_export/Heavy/Heavy_"$NAME"_params.json"
+  CPP_PATH="$new_dir_export/plugin/src/PluginProcessor.cpp"
+
+  # Call the Python script
+  python3 ./utils/init_prepare_to_play.py "$JSON_PATH" "$CPP_PATH" "$NAME"
+}
 
 # Main execution
 validate_args
@@ -256,6 +268,8 @@ run_hvcc
 juce_cmake
 replace_boilerplate
 add_params_to_layout
+is_synth_note_on_off
+init_prepare_to_play
 
 # deactivate
 echo "--------------------------------------------------"

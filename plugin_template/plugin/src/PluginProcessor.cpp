@@ -97,6 +97,22 @@ namespace Boiler_plate {
     {
         // Use this method as the place to do any pre-playback
         // initialisation that you need..
+        if (hv_getSampleRate(context) != sampleRate)
+        {
+            if (context != nullptr) hv_delete(context);
+
+            // @_ADD_HEAVY_CONTEXT_HERE
+            context = hv_osc_one_d_one_new(sampleRate);
+        }
+        
+        parametersChanged.store(true);
+    }
+
+    void Plugdata_templateAudioProcessor::update()
+    {
+        // @_ADD_PARAMS_TO_UPDATE_HERE
+        // float volValue = _volParam->get();
+        // hv_sendFloatToReceiver(context, 0x8559698F, volValue);
     }
 
     void AudioPluginAudioProcessor::releaseResources()
@@ -144,20 +160,88 @@ namespace Boiler_plate {
         // when they first compile a plugin, but obviously you don't need to keep
         // this code if your algorithm always overwrites all the output channels.
         for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-            buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear (i, 0, buffer.getNumSamples());
 
-        // This is the place where you'd normally do the guts of your plugin's
-        // audio processing...
-        // Make sure to reset the state if your inner loop is processing
-        // the samples and the outer loop is handling the channels.
-        // Alternatively, you can process the samples with the channels
-        // interleaved by keeping the same state.
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
-        {
-            auto* channelData = buffer.getWritePointer (channel);
+        float* outputBuffers[2] = { nullptr, nullptr };
+        float* inputBuffers[2] = { nullptr, nullptr };
 
-            // ..do something to the data...
+        outputBuffers[0] = buffer.getWritePointer(0);
+        inputBuffers[0] = buffer.getWritePointer(0);
+        
+        if (getTotalNumOutputChannels() > 1) {
+            outputBuffers[1] = buffer.getWritePointer(1);
+            inputBuffers[1] = buffer.getWritePointer(1);
         }
+        
+        hv_process(context, nullptr, outputBuffers, buffer.getNumSamples());
+        
+        splitBufferByEvents(buffer, midiMessages);
+    }
+
+    void AudioPluginAudioProcessor::splitBufferByEvents(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+    {
+        int bufferOffset = 0;
+
+        // Loop through the MIDI messages, which are sorted by samplePosition.
+        for (const auto metadata : midiMessages) {
+
+            // Render the audio that happens before this event (if any).
+            int samplesThisSegment = metadata.samplePosition - bufferOffset;
+            if (samplesThisSegment > 0) {
+                // render(buffer, samplesThisSegment, bufferOffset);
+                bufferOffset += samplesThisSegment;
+            }
+
+            // Handle the event. Ignore MIDI messages such as sysex.
+            if (metadata.numBytes <= 3) {
+                uint8_t data1 = (metadata.numBytes >= 2) ? metadata.data[1] : 0;
+                uint8_t data2 = (metadata.numBytes == 3) ? metadata.data[2] : 0;
+                handleMIDI(metadata.data[0], data1, data2);
+            }
+        }
+
+        // Render the audio after the last MIDI event. If there were no
+        // MIDI events at all, this renders the entire buffer.
+        int samplesLastSegment = buffer.getNumSamples() - bufferOffset;
+        if (samplesLastSegment > 0) {
+            // render(buffer, samplesLastSegment, bufferOffset);
+        }
+
+        midiMessages.clear();
+    }
+
+    void AudioPluginAudioProcessor::handleMIDI(uint8_t data0, uint8_t data1, uint8_t data2)
+    {
+        switch (data0 & 0xF0) {
+            // Note off
+            case 0x80:
+                noteOff(data1 & 0x7F);
+                break;
+
+            // Note on
+            case 0x90: {
+                uint8_t note = data1 & 0x7F;
+                uint8_t velo = data2 & 0x7F;
+                if (velo > 0) {
+                    noteOn(note, velo);
+                } else {
+                    noteOff(note);
+                }
+                break;
+            }
+        }
+    }
+
+    void AudioPluginAudioProcessor::noteOn(int note, int velocity)
+    {
+        // @_UNCOMMENT_NOTE_ON_HERE
+        // context->sendMessageToReceiverV(0x67E37CA3, 0, "fff", (float) note, (float) velocity, 1.0f);
+    }
+
+    void AudioPluginAudioProcessor::noteOff(int note)
+    {
+        // @_UNCOMMENT_NOTE_OFF_HERE
+        // context->sendMessageToReceiverV(0x67E37CA3, 0, "fff", (float) note, 0.0f, 1.0f);
     }
 
     //==============================================================================
@@ -172,7 +256,7 @@ namespace Boiler_plate {
 
         // Generic UI
         auto editor = new juce::GenericAudioProcessorEditor(*this);
-        editor->setSize(500, 1050);
+        editor->setSize(500, 700);
         return editor;
     }
 
@@ -190,12 +274,6 @@ namespace Boiler_plate {
         // whose contents will have been created by the getStateInformation() call.
     }
 
-    //==============================================================================
-    // This creates new instances of the plugin..
-    // juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-    // {
-    //     return new AudioPluginAudioProcessor();
-    // }
     juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
     {
         juce::AudioProcessorValueTreeState::ParameterLayout layout;
