@@ -165,7 +165,7 @@ run_hvcc() {
 
   # Run hvcc command
   # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./libs/heavylib"
-  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "js" -p "./libs/heavylib"
+  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "c" -p "./libs/heavylib"
 
   # Run Python script with the new directory
   python3 ./utils/parse_params.py "$heavy_dir" "$NAME"
@@ -268,6 +268,16 @@ add_params_to_update() {
   python3 ./utils/insert_param_updates.py "$CPP_PATH" "$JSON_PATH"
 }
 
+reorg_heavy_source() {
+  # Paths to input files
+  HEAVY_OUT_PATH="$new_dir_export/Heavy"
+
+  mkdir -p "$HEAVY_OUT_PATH/h"
+
+  # Call the Python script
+  python3 ./utils/move_headers.py "$HEAVY_OUT_PATH/c"
+}
+
 # Main execution
 validate_args
 install_git_submodules
@@ -278,6 +288,7 @@ replace_boilerplate
 add_params_to_layout
 is_synth_note_on_off
 init_prepare_to_play
+reorg_heavy_source
 
 # deactivate
 echo "--------------------------------------------------"
