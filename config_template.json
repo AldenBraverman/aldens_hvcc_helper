@@ -1,0 +1,33 @@
+{
+    "folder_name": "my_folder",
+    "project_name": "osc_test",
+    "manufacturer_settings": {
+        "name": "my_manufacturer",
+        "code": "manu"
+    },
+    "project_version": "1.0.0",
+    "is_synth": "N",
+    "web_gen": "Y",
+    "generic_ui": {
+        "use_web_ui": "N",
+        "react_project_path": ""
+    },
+    "pd_paths": {
+        "patch_path": "./osc_test.pd",
+        "heavylib_path": "./libs/heavylib"
+    },
+    "cmake_settings": {
+        "plugin_name": "MyPlugin",
+        "company_name": "aldenbraverman",
+        "needs_midi_input": "FALSE",
+        "needs_midi_output": "FALSE",
+        "plugin_manufacturer_code": "ALDB",
+        "plugin_code": "ALDB",
+        "formats": [
+            "VST3",
+            "AU",
+            "Standalone"
+        ],
+        "needs_webview2": "TRUE"
+    }
+}
