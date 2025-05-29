@@ -1,22 +1,19 @@
 {
     "folder_name": "my_folder",
-    "project_name": "my_project",
+    "project_name": "osc_test",
     "manufacturer_settings": {
         "name": "my_manufacturer",
         "code": "manu"
     },
     "project_version": "1.0.0",
-    "is_synth": "Y",
-    "modules": {
-        "native": "Y",
-        "web": "Y"
-    },
+    "is_synth": "N",
+    "web_gen": "Y",
     "generic_ui": {
         "use_web_ui": "N",
         "react_project_path": ""
     },
     "pd_paths": {
-        "patch_path": "./aldens_polysynth.pd",
+        "patch_path": "./osc_test.pd",
         "heavylib_path": "./libs/heavylib"
     },
     "cmake_settings": {

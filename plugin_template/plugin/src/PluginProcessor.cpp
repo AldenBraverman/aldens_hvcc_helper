@@ -24,10 +24,17 @@ namespace Boiler_plate {
                         )
     #endif
     {
+        context = hv_Boiler_plate_new(44100.0);
+        // @_ADD_CAST_PARAMETERS_HERE
+
+        apvts.state.addListener(this);
     }
 
     AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
     {
+        hv_delete(context);
+        
+        apvts.state.removeListener(this);
     }
 
     //==============================================================================
@@ -149,6 +156,11 @@ namespace Boiler_plate {
 
     void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
     {
+        bool expected = true;
+        if (isNonRealtime() || parametersChanged.compare_exchange_strong(expected, false)) {
+            update();
+        }
+
         juce::ScopedNoDenormals noDenormals;
         auto totalNumInputChannels  = getTotalNumInputChannels();
         auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -256,7 +268,7 @@ namespace Boiler_plate {
 
         // Generic UI
         auto editor = new juce::GenericAudioProcessorEditor(*this);
-        editor->setSize(500, 700);
+        editor->setSize(500, 250);
         return editor;
     }
 

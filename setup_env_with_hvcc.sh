@@ -57,12 +57,14 @@ TAG=$(jq -r '.folder_name' "$CONFIG_FILE")
 FILE_PATH=$(jq -r '.pd_paths.patch_path' "$CONFIG_FILE")
 NAME=$(jq -r '.project_name' "$CONFIG_FILE")
 IS_SYNTH=$(jq -r '.is_synth' "$CONFIG_FILE")
+GENERATOR=$(jq -r '.web_gen' "$CONFIG_FILE")
 
 # The rest of your script can use $tag, $file_path, $name, $is_synth as before
 echo "Tag: $TAG"
 echo "File Path: $FILE_PATH"
 echo "Project Name: $NAME"
 echo "Is Synth: $IS_SYNTH"
+echo "Generator: $GENERATOR"
 
 # Validate arguments
 validate_args() {
@@ -102,7 +104,8 @@ install_git_submodules() {
     echo "Initializing and updating Git submodules..."
     git submodule init
     # git submodule update --remote
-    git submodule update --init --recursive
+    # git submodule update --init --recursive
+    git submodule update --recursive --remote
     echo "Git submodules initialized and updated."
   else
     echo "No Git submodules found."
@@ -156,17 +159,16 @@ run_hvcc() {
   local generator_arg=""
 
   # Map generator argument
-  if [[ "$GENERATOR" == "juce" ]]; then
+  if [[ "$GENERATOR" == "N" ]]; then
       generator_arg="c"
-  elif [[ "$GENERATOR" == "web" ]]; then
-      echo "Web support coming soon!"
-      exit 1
+  elif [[ "$GENERATOR" == "Y" ]]; then
+      generator_arg="js"
+      # exit 1
   fi
 
   # Run hvcc command
   # hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./libs/heavylib"
-  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "c" -p "./libs/heavylib"
-
+  hvcc "$hvcc_input_file" -o "$heavy_dir" -n "$NAME" -g "$generator_arg" -p "./libs/heavylib"
   # Run Python script with the new directory
   python3 ./utils/parse_params.py "$heavy_dir" "$NAME"
 }
@@ -208,6 +210,9 @@ juce_cmake() {
       fi
   done
 
+  # Insert CMake functions here
+  python3 ./utils/exclude_hvcc_c_files.py "$new_dir_export/plugin/CMakeLists.txt" "$new_dir_export/Heavy/c"
+
   # cd "$new_dir_export/CMake"
   # cmake -G "Xcode" -B build .
 }
@@ -246,6 +251,7 @@ add_params_to_layout() {
 
   # Call the Python script
   python3 ./utils/add_params_to_layout.py "$JSON_PATH" "$CPP_PATH"
+  python3 ./utils/add_params_to_update.py "$CPP_PATH" "$JSON_PATH"
 }
 
 is_synth_note_on_off() { 

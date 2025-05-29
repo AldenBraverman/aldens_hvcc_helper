@@ -18,7 +18,37 @@ target_compile_definitions(Boiler_plate PRIVATE
 )
 
 target_sources(Boiler_plate
-    PRIVATE src/PluginEditor.cpp src/PluginProcessor.cpp ${CMAKE_SOURCE_DIR}/Heavy/c/Heavy_Boiler_plate.cpp ${CMAKE_SOURCE_DIR}/Heavy/c/HeavyContext.cpp ${CMAKE_SOURCE_DIR}/Heavy/c/HvHeavy.cpp ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlBinop.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlCast.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlDelay.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlIf.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlPack.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlSlice.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlSystem.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlTabread.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlTabwrite.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlUnop.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlVar.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvLightPipe.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvMessage.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvMessagePool.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvMessageQueue.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalDel1.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalLine.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalPhasor.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalSamphold.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalVar.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvTable.c ${CMAKE_SOURCE_DIR}/Heavy/c/HvUtils.c)
+    PRIVATE 
+        src/PluginEditor.cpp 
+        src/PluginProcessor.cpp 
+        # @_HEAVY_SOURCES_START_@
+        ${CMAKE_SOURCE_DIR}/Heavy/c/Heavy_Boiler_plate.cpp 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HeavyContext.cpp 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvHeavy.cpp 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlBinop.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlCast.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlDelay.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlIf.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlPack.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlSlice.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlSystem.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlTabread.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlTabwrite.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlUnop.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvControlVar.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvLightPipe.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvMessage.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvMessagePool.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvMessageQueue.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalDel1.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalLine.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalPhasor.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalSamphold.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalVar.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvTable.c 
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvUtils.c
+    )
+        # @_HEAVY_SOURCES_END_@
 
 target_include_directories(Boiler_plate PRIVATE include ${CMAKE_SOURCE_DIR}/Heavy/h)
 

@@ -9,6 +9,7 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Heavy_Boiler_plate.h"
+#include "Heavy_Boiler_plate.hpp"
 
 namespace ParameterID
 {
