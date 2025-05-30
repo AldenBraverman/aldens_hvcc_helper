@@ -53,6 +53,7 @@ if [ -z "$CONFIG_FILE" ]; then
 fi
 
 # Extract variables from JSON
+CONFIG="$CONFIG_FILE"
 TAG=$(jq -r '.folder_name' "$CONFIG_FILE")
 FILE_PATH=$(jq -r '.pd_paths.patch_path' "$CONFIG_FILE")
 NAME=$(jq -r '.project_name' "$CONFIG_FILE")
@@ -60,6 +61,7 @@ IS_SYNTH=$(jq -r '.is_synth' "$CONFIG_FILE")
 GENERATOR=$(jq -r '.web_gen' "$CONFIG_FILE")
 
 # The rest of your script can use $tag, $file_path, $name, $is_synth as before
+echo "Configuration loaded from $CONFIG_FILE"
 echo "Tag: $TAG"
 echo "File Path: $FILE_PATH"
 echo "Project Name: $NAME"
@@ -150,6 +152,7 @@ run_hvcc() {
   # Validate and copy .pd file
   if [[ -f "$FILE_PATH" ]]; then
       cp "$FILE_PATH" "$new_dir/"
+      cp "$CONFIG" "$new_dir/"
   else
       echo "Error: File '$FILE_PATH' does not exist."
       exit 1
