@@ -1,4 +1,4 @@
-# Alden's hvcc helper
+Alden's hvcc helper
 aldens_hvcc_helper converts a [heavy compatible](https://wasted-audio.github.io/hvcc/) [pure data](https://puredata.info/) patch into [WebAssembly](https://emscripten.org/) and [JUCE](https://juce.com/) [CMake](https://cmake.org/) project. It's usage enables rapid iteration, generating the WebAssembly and JUCE code in a matter of seconds. With the WebAssembly code and the JUCE CMake project, you can deliver the audio application to a game engine, web, VST3, mobile or native exactly how the application was designed in pure data.
 ### Requirements
 - [git](https://git-scm.com/downloads)
@@ -15,12 +15,19 @@ aldens_hvcc_helper converts a [heavy compatible](https://wasted-audio.github.io/
 2. Open the repo is vscode
 	- `cd aldens_hvcc_helper`
 	- `code .`
+#### Verify Requirements Installs
+1. In your terminal/command prompt, make sure the following commands are found:
+	- `git`
+	- `docker`
+	- `code`
+	- `cmake --help`
+		- Here you should see your generators listed; `Xcode` for MacOS, `Visual Studio 16 2019` for Windows (you may have a different Visual Studio version, use whatever version you have installed)
 ### Usage
 1. Open the repo in the dev container
 2. Make a copy (`cp config_template.json <config_name>.json`), or update the contents of the `config_template.json` file
-  - set `patch_path` to the path of your puredata patch
-  - if your patch uses a `notein` object/is a synthesizer, set `is_synth=Y` and `needs_midi_input=TRUE` 
-  - if your patch is an audio effect, set `is_synth=N` and `needs_midi_input=FALSE`
+	  - set `patch_path` to the path of your puredata patch
+	  - if your patch uses a `notein` object/is a synthesizer, set `is_synth=Y` and `needs_midi_input=TRUE` 
+	  - if your patch is an audio effect, set `is_synth=N` and `needs_midi_input=FALSE`
 ```json
 {
 	"folder_name": "my_folder",
