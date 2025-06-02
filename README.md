@@ -1,4 +1,4 @@
-Alden's hvcc helper
+# Alden's hvcc helper
 aldens_hvcc_helper converts a [heavy compatible](https://wasted-audio.github.io/hvcc/) [pure data](https://puredata.info/) patch into [WebAssembly](https://emscripten.org/) and [JUCE](https://juce.com/) [CMake](https://cmake.org/) project. It's usage enables rapid iteration, generating the WebAssembly and JUCE code in a matter of seconds. With the WebAssembly code and the JUCE CMake project, you can deliver the audio application to a game engine, web, VST3, mobile or native exactly how the application was designed in pure data.
 ### Requirements
 - [git](https://git-scm.com/downloads)
