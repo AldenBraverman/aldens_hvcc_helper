@@ -5,7 +5,7 @@ juce_add_plugin(Boiler_plate
     NEEDS_MIDI_OUTPUT FALSE
     PLUGIN_MANUFACTURER_CODE ALDB
     PLUGIN_CODE ALDB
-    FORMATS AU VST3 Standalone
+    FORMATS AU VST3 Standalone Unity AUv3
     NEEDS_WEBVIEW2 TRUE
 )
 
