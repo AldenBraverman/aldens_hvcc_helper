@@ -1,0 +1,33 @@
+{
+    "folder_name": "aldhis",
+    "project_name": "aldhis",
+    "manufacturer_settings": {
+        "name": "aldenbraverman",
+        "code": "aldb"
+    },
+    "project_version": "1.0.0",
+    "is_synth": "N",
+    "web_gen": "N",
+    "generic_ui": {
+        "use_web_ui": "N",
+        "react_project_path": ""
+    },
+    "pd_paths": {
+        "patch_path": "./aldhis.pd",
+        "heavylib_path": "./libs/heavylib"
+    },
+    "cmake_settings": {
+        "plugin_name": "aldhis",
+        "company_name": "aldenbraverman",
+        "needs_midi_input": "FALSE",
+        "needs_midi_output": "FALSE",
+        "plugin_manufacturer_code": "ALDB",
+        "plugin_code": "ALDB",
+        "formats": [
+            "VST3",
+            "AU",
+            "Standalone"
+        ],
+        "needs_webview2": "TRUE"
+    }
+}
