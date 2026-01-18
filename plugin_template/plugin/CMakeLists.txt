@@ -47,6 +47,8 @@ target_sources(Boiler_plate
         ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalVar.c 
         ${CMAKE_SOURCE_DIR}/Heavy/c/HvTable.c 
         ${CMAKE_SOURCE_DIR}/Heavy/c/HvUtils.c
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalBiquad.c
+        ${CMAKE_SOURCE_DIR}/Heavy/c/HvSignalRPole.c
     )
         # @_HEAVY_SOURCES_END_@
 
