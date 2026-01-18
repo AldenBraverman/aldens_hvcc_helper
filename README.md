@@ -65,12 +65,12 @@
 	}
 }
 ```
-3. Run the generate command: `./setup_env_with_hvcc -c config_template.json`
+3. Run the generate command: `./setup_env_with_hvcc.sh -c config_template.json`
 4. Reopen the repo locally, this will make the CMake builds for native targets easier/faster
 5. Open the output directory in an integrated terminal
 6. Build the cmake project
 	- On MacOS, use `cmake -G "Xcode" -B build .`
-	- On Windows, use `cmake -G "Visual Studio 16 2019" -B build .`
+	- On Windows, use `cmake -G "Visual Studio 17 2022" -B build .`
 7. When the build complete, build the artifacts: `cmake --build build`
 ### Artifact locations and testing
 - Native files can be found at the following:

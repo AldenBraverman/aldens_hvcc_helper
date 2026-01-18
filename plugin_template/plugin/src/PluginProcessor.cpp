@@ -185,7 +185,7 @@ namespace Boiler_plate {
             inputBuffers[1] = buffer.getWritePointer(1);
         }
         
-        hv_process(context, nullptr, outputBuffers, buffer.getNumSamples());
+        hv_process(context, inputBuffers, outputBuffers, buffer.getNumSamples());
         
         splitBufferByEvents(buffer, midiMessages);
     }
