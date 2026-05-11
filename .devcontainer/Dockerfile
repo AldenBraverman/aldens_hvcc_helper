@@ -70,6 +70,6 @@ COPY . ./
 
 # Set the default command to bash
 # CMD ["/bin/bash"]
-CMD chmod 755 setup_env_with_hvcc.sh && ./setup_env_with_hvcc.sh
+CMD chmod 755 setup_env_with_hvcc.sh && ./setup_env_with_hvcc.sh -c config_template.json
 
 

@@ -24,7 +24,7 @@ def replace_heavy_context_call(cpp_path, new_context_name):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python3 ./utils/replace_heavy_context.py <path_to_cpp> <new_context_name>")
+        print("Usage: python3 utils/init_prepare_to_play.py <path_to_cpp> <new_context_name>")
         sys.exit(1)
 
     cpp_path = sys.argv[1]

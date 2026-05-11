@@ -1,37 +1,55 @@
 # Alden's hvcc helper
-- aldens_hvcc_helper converts a [heavy compatible](https://wasted-audio.github.io/hvcc/) [pure data](https://puredata.info/) patch into [WebAssembly](https://emscripten.org/) and [JUCE](https://juce.com/) [CMake](https://cmake.org/) project.
-- It's usage enables rapid iteration, generating the WebAssembly and JUCE code in a matter of seconds.
-- With the WebAssembly code and the JUCE CMake project, you can deliver the audio application to a game engine, web, VST3, mobile or native exactly how the application was designed in pure data.
+
+This repo turns a [Pure Data](https://puredata.info/) patch into either:
+
+- **hvcc / Heavy**: a [Heavy-compatible](https://wasted-audio.github.io/hvcc/) patch compiled to C or JavaScript plus a [JUCE](https://juce.com/) CMake plugin (and optional WebAssembly when `web_gen` is `Y`).
+- **libpd** (JUCE desktop only): the same patch runs inside the real Pd engine via [libpd](https://github.com/libpd/libpd), linked as a native plugin (no hvcc-generated Heavy sources, no WASM in v1).
+
+Orchestration is implemented in [tools/generate.py](tools/generate.py) (Python 3, stdlib only). [setup_env_with_hvcc.sh](setup_env_with_hvcc.sh) is a thin wrapper that calls that script.
+
 ### Requirements
-- [git](https://git-scm.com/downloads)
-- [docker](https://www.docker.com/)
-- [vscode](https://code.visualstudio.com/)
-	- [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- [cmake]()
-	- Generators (Otherwise, you can the `Unix Makefiles` generator with the dev container)
-		- MacOS: [Xcode]()
-		- Windows: [Visual Studio]()
-### Getting Started
-1. Clone the repo
-	- `git clone https://github.com/AldenBraverman/aldens_hvcc_helper.git`
-2. Open the repo is vscode
-	- `cd aldens_hvcc_helper`
-	- `code .`
-#### Verify Requirements Installs
-1. In your terminal/command prompt, make sure the following commands are found:
-	- `git`
-	- `docker`
-	- `code`
-	- `cmake --help`
-		- Here you should see your generators listed; `Xcode` for MacOS, `Visual Studio 16 2019` for Windows (you may have a different Visual Studio version, use whatever version you have installed)
-### Usage
-1. Open the repo in the dev container
-2. Make a copy (`cp config_template.json <config_name>.json`), or update the contents of the `config_template.json` file
-	  - set `patch_path` to the path of your puredata patch
-	  - if your patch uses a `notein` object/is a synthesizer, set `is_synth=Y` and `needs_midi_input=TRUE` 
-	  - if your patch is an audio effect, set `is_synth=N` and `needs_midi_input=FALSE`
+
+- [git](https://git-scm.com/downloads) (submodules: JUCE, and libpd if you use `audio_engine: libpd`)
+- [docker](https://www.docker.com/) and [VS Code](https://code.visualstudio.com/) with the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension (optional)
+- [CMake](https://cmake.org/) 3.22+ for hvcc outputs; **3.25+** for libpd outputs (required by upstream libpd)
+- [hvcc](https://wasted-audio.github.io/hvcc/) on `PATH` when using `audio_engine: hvcc`
+
+### Getting started
+
+1. `git clone https://github.com/AldenBraverman/aldens_hvcc_helper.git`
+2. `cd aldens_hvcc_helper`
+3. Initialize submodules (first clone):
+
+```bash
+git submodule update --init --recursive
+```
+
+For libpd, ensure `libs/libpd/pure-data/src/m_pd.h` exists; if `pure-data` is empty, run:
+
+```bash
+cd libs/libpd && git submodule update --init --recursive && cd ../..
+```
+
+### Configuration
+
+Copy [config_template.json](config_template.json) or edit it. Important keys:
+
+| Key | Meaning |
+|-----|--------|
+| `audio_engine` | `"hvcc"` (default) or `"libpd"` |
+| `folder_name` | Output folder tag under `outputs/<timestamp>_<folder_name>/` |
+| `project_name` | C++/CMake symbol prefix (replaces `Boiler_plate` in templates) |
+| `pd_paths.patch_path` | Path to the `.pd` file (repo-relative or absolute) |
+| `is_synth` | `Y` / `N` — drives MIDI note hooks for **hvcc** plugins |
+| `web_gen` | `Y` generates hvcc JS/WASM; **`Y` is ignored with a warning when `audio_engine` is `libpd`** |
+| `cmake_settings` | `company_name`, `needs_midi_input`, `needs_midi_output`, `plugin_manufacturer_code`, `plugin_code`, `formats`, `needs_webview2`, etc. These are written into the generated `plugin/CMakeLists.txt`. |
+| `libpd.search_paths` | Optional list of extra directories or files copied under `plugin/pd/extra/` and embedded with the patch (abstractions must resolve from those paths) |
+
+Example (hvcc):
+
 ```json
 {
+	"audio_engine": "hvcc",
 	"folder_name": "my_folder",
 	"project_name": "osc_test",
 	"manufacturer_settings": {
@@ -49,6 +67,9 @@
 		"patch_path": "./aldens_polysynth.pd",
 		"heavylib_path": "./libs/heavylib"
 	},
+	"libpd": {
+		"search_paths": []
+	},
 	"cmake_settings": {
 		"plugin_name": "MyPlugin",
 		"company_name": "aldenbraverman",
@@ -65,15 +86,37 @@
 	}
 }
 ```
-3. Run the generate command: `./setup_env_with_hvcc.sh -c config_template.json`
-4. Reopen the repo locally, this will make the CMake builds for native targets easier/faster
-5. Open the output directory in an integrated terminal
-6. Build the cmake project
-	- On MacOS, use `cmake -G "Xcode" -B build .`
-	- On Windows, use `cmake -G "Visual Studio 17 2022" -B build .`
-7. When the build complete, build the artifacts: `cmake --build build`
-### Artifact locations and testing
-- Native files can be found at the following:
-	- Standalone: `<output_dir>/build/plugin/<project_name>_artifacts/Debug/Standalone/`
-	- VST3: `<output_dir>/build/plugin/<project_name>_artifacts/Debug/VST3/`
-- WebAssembly Index file can be found here: `<output_dir>/Heavy/js/index.html`
+
+**hvcc note:** In the generated `PluginProcessor.cpp`, the line after `//@_ADD_HEAVY_CONTEXT_HERE` is a placeholder until [utils/init_prepare_to_play.py](utils/init_prepare_to_play.py) rewrites it to match your patch name.
+
+### Usage
+
+1. (Optional) Open the repo in the dev container.
+2. Edit or copy `config_template.json` as above.
+3. Run either:
+
+```bash
+./setup_env_with_hvcc.sh -c config_template.json
+```
+
+or:
+
+```bash
+python3 tools/generate.py -c config_template.json
+```
+
+4. Open the new directory under `outputs/<timestamp>_<folder_name>/` and configure/build CMake from there (so relative paths to `libs/juce` and `libs/libpd` resolve).
+
+**macOS (example):** `cmake -G "Xcode" -B build .` then `cmake --build build`  
+**Windows:** use a supported Visual Studio generator and see libpd’s CMake notes for MSVC/pthreads if you use `audio_engine: libpd`.
+
+### Artifact locations
+
+- Native (hvcc or libpd): `<output_dir>/build/plugin/<target>_artifacts/...` (layout depends on generator and config).
+- WebAssembly (hvcc only): `<output_dir>/Heavy/js/index.html`
+
+### libpd limitations (v1)
+
+- Desktop JUCE targets only; there is no libpd-backed WASM path yet.
+- Audio is advanced in multiples of `libpd_blocksize()` (64 samples); shorter tails at the end of a host buffer are passed through unchanged.
+- Windows MSVC builds need extra setup for libpd (pthreads); see upstream libpd documentation.

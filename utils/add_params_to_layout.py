@@ -1,4 +1,4 @@
-# insert_params.py
+"""Insert APVTS parameter layout blocks from Heavy_*_params.json into PluginProcessor.cpp."""
 import json
 import sys
 
@@ -38,6 +38,6 @@ def insert_parameter_blocks(json_path, cpp_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python insert_params.py <path_to_json> <path_to_cpp>")
+        print("Usage: python3 utils/add_params_to_layout.py <path_to_json> <path_to_cpp>")
         sys.exit(1)
     insert_parameter_blocks(sys.argv[1], sys.argv[2])
